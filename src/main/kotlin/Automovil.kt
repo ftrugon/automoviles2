@@ -1,12 +1,12 @@
 import kotlin.reflect.KMutableProperty
 
-class Automovil(val esElectrico:Boolean,
+class Automovil(val esHibrido:Boolean,
                 marca: String,
                 modelo: String,
                 capacidadcombustible:Float,
                 val tipo :String,
                 combustibleactual: Float,
-                kilometrosactuales: Int
+                kilometrosactuales: Float
 ):Vehiculo(marca,modelo,capacidadcombustible,
     combustibleactual, kilometrosactuales
 ){
@@ -22,38 +22,9 @@ class Automovil(val esElectrico:Boolean,
         return "${super.toString().dropLast(1).replace("Vehiculo","Coche")}, tipo = $tipo)"
     }
 
-    override fun calcularautonomia(): Int {
-        return if (esElectrico) super.calcularautonomia() + (super.calcularautonomia()/2) else super.calcularautonomia()
-    }
-
-
-    override fun realizarviaje(distancia: Int): Int {
-        val poderrecorrer = calcularautonomia()
-
-        KM_por_L = if (esElectrico) 15 else 10
-
-        if (poderrecorrer >=  distancia){
-
-            this.combustibleactual -= (distancia / KM_por_L.toFloat()).redondear(1)
-
-            this.kilometrosactuales += distancia
-
-            println("Se han recorrido todos los kilometros")
-
-            return 0
-
-        }else {
-
-            val quequeda = distancia - poderrecorrer
-
-            this.combustibleactual = 0F
-
-            this.kilometrosactuales += distancia - quequeda
-
-            println("Quedan algunos kilometros $quequeda")
-
-            return quequeda
-        }
+    override fun calcularautonomia(): Float {
+        KM_por_L = if (esHibrido) 15 else 10
+        return super.calcularautonomia()
     }
 
 
@@ -62,15 +33,20 @@ class Automovil(val esElectrico:Boolean,
     }
 
     fun realizarderrape():Float{
-        if (esElectrico && combustibleactual > 0.33){
-            combustibleactual -= 0.33F
-            return 0.33F
-        }else if (!esElectrico && combustibleactual > 0.33){
-            combustibleactual -= 0.5F
-            return 0.5F
-        }else{
-            println("No hay combustible como para hacer un derrape")
-            return 0F
+        return if (combustibleactual >=  (7.5/10)){
+            if (esHibrido){
+                val litrosarestar = 7.5/15
+                combustibleactual -= litrosarestar.toFloat()
+                combustibleactual
+            }else{
+                val litrosarestar = 7.5 / 10
+                combustibleactual -= litrosarestar.toFloat()
+                combustibleactual
+            }
+        }else {
+            println("No hay combustible como para derrapar")
+            combustibleactual
         }
     }
+
 }

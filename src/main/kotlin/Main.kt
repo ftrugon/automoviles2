@@ -18,13 +18,15 @@ fun main() {
     //sedan.realizarviaje(183)
     //println(sedan)
 
-    //val coche1 = Automovil(false,"Nisan","pulsar",60F,"Nidea",12F,0)
-    //println(coche1)
-    //coche1.realizarviaje(15)
-    //println(coche1)
+    val coche1 = Automovil(true,"Nisan","pulsar",60F,"Nidea",12F,0F)
+    println(coche1)
+    coche1.realizarviaje(15.2F)
+    println(coche1)
 
-    val moto1 = Motocicleta("kawasaki","kriko",30F,125,5F,0)
-
+    val moto1 = Motocicleta("kawasaki","kriko",30F,125,5F,0F)
+    println(moto1)
+    moto1.realizarviaje(20.0F)
+    println(moto1)
 }
 
 
