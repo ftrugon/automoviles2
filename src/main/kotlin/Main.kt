@@ -1,22 +1,30 @@
-//fun Float.redondear(posiciones:Int):Float{
-//
-//}
+fun Float.redondear(posiciones:Int):Float{
+    var elevar = 1
+    for (i in 1..posiciones) elevar *= 10
+    return (this * elevar).toInt().toFloat() / elevar
+}
 
 fun main() {
 
-    val sedan = Vehiculo("sedan","holiwi",40F,15F,2)
 
-    println(sedan)
-    sedan.realizarviaje(180)
-    println(sedan)
-    sedan.repostar()
-    println(sedan)
-    sedan.realizarviaje(183)
-    println(sedan)
 
-    //val kawasaki = Motocicleta("kawasaki","kriko",12F,50)
-    //println(kawasaki)
-    //println(kawasaki.capacidadcombustible)
+    //val sedan = Vehiculo("sedan","holiwi",40F,15F,2)
+//
+    //println(sedan)
+    //sedan.realizarviaje(180)
+    //println(sedan)
+    //sedan.repostar(21.4F)
+    //println(sedan)
+    //sedan.realizarviaje(183)
+    //println(sedan)
+
+    //val coche1 = Automovil(false,"Nisan","pulsar",60F,"Nidea",12F,0)
+    //println(coche1)
+    //coche1.realizarviaje(15)
+    //println(coche1)
+
+    val moto1 = Motocicleta("kawasaki","kriko",30F,125,5F,0)
+
 }
 
 

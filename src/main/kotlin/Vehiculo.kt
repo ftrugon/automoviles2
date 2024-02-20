@@ -9,6 +9,7 @@ open class Vehiculo(private val marca: String,
         requirecosastring(marca)
         requirecosastring(modelo)
         require(capacidadcombustible > 0) {"La capidad no puedeser menor a 0"}
+        require(combustibleactual in 0F..capacidadcombustible) {"El combustible actual no puede ser mayor a la capaciddad y menor a 0"}
     }
 
     private fun requirecosastring(valorarequerir:String){
@@ -16,9 +17,8 @@ open class Vehiculo(private val marca: String,
     }
 
     companion object{
-        const val KM_por_L = 10
+        var KM_por_L = 10
     }
-
 
     fun obtenerinformacion():String{
         return "El vehiculo puede recorrer ${calcularautonomia()}km y le quedan ${combustibleactual}L"
@@ -32,7 +32,7 @@ open class Vehiculo(private val marca: String,
         val poderrecorrer = calcularautonomia()
         if (poderrecorrer >=  distancia){
 
-            this.combustibleactual -= distancia / KM_por_L
+            this.combustibleactual -= (distancia / KM_por_L.toFloat()).redondear(1)
 
             this.kilometrosactuales += distancia
 
@@ -57,25 +57,25 @@ open class Vehiculo(private val marca: String,
 
     open fun repostar(cantidad:Float = 0F):Float{
         if (cantidad == 0F) {
-            val arepostar = capacidadcombustible - combustibleactual
-            combustibleactual = capacidadcombustible
+            val arepostar = (capacidadcombustible - combustibleactual).redondear(1)
+            combustibleactual = capacidadcombustible.redondear(1)
             return arepostar
 
-        }else if (cantidad < (capacidadcombustible - combustibleactual)){
-            val arepostar = (capacidadcombustible - combustibleactual) - cantidad
+        }else if (cantidad < (capacidadcombustible - combustibleactual).redondear(1)){
+            val arepostar = ((capacidadcombustible - combustibleactual) - cantidad).redondear(1)
             combustibleactual += cantidad
             println("Se tienen que repostar $arepostar L")
             return arepostar
         }else{
-            val arepostar = capacidadcombustible - combustibleactual
-            combustibleactual = capacidadcombustible
+            val arepostar = (capacidadcombustible - combustibleactual).redondear(1)
+            combustibleactual = capacidadcombustible.redondear(1)
             println("Se tienen que repostar $arepostar L")
             return arepostar
         }
     }
 
     override fun toString(): String {
-        return "Vehiculo (marca = $marca, modelo = $modelo, capacidad = $capacidadcombustible, combustibleactual = $combustibleactual, kilomentros actuales = $kilometrosactuales)"
+        return "Vehiculo (marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(1)}, combustibleactual = ${combustibleactual.redondear(1)}, kilomentros actuales = $kilometrosactuales)"
     }
 
 }
