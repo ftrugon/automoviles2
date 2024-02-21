@@ -25,6 +25,7 @@ open class Vehiculo(private val marca: String,
     }
 
     open fun calcularautonomia(): Float {
+        KM_por_L = 10
         return combustibleactual * KM_por_L
     }
 

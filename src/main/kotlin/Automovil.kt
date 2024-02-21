@@ -35,17 +35,17 @@ class Automovil(val esHibrido:Boolean,
     fun realizarderrape():Float{
         return if (combustibleactual >=  (7.5/10)){
             if (esHibrido){
-                val litrosarestar = 7.5/15
+                val litrosarestar = 7.5/ KM_por_L
                 combustibleactual -= litrosarestar.toFloat()
-                combustibleactual
+                combustibleactual.redondear(2)
             }else{
-                val litrosarestar = 7.5 / 10
+                val litrosarestar = 7.5 / KM_por_L
                 combustibleactual -= litrosarestar.toFloat()
-                combustibleactual
+                combustibleactual.redondear(2)
             }
         }else {
             println("No hay combustible como para derrapar")
-            combustibleactual
+            combustibleactual.redondear(2)
         }
     }
 

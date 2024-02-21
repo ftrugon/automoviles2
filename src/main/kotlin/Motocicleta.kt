@@ -16,12 +16,13 @@ class Motocicleta(marca: String,
     }
 
     fun realizarcaballito():Float{
-        return if (combustibleactual > 0.25){
-            combustibleactual -= 0.25F
-            combustibleactual
+        val litrosarestar = 6.5F / KM_por_L
+        return if (combustibleactual > litrosarestar){
+            combustibleactual -= litrosarestar
+            combustibleactual.redondear(2)
         }else{
             println("No queda combustible como para hacer un caballito")
-            combustibleactual
+            combustibleactual.redondear(2)
         }
     }
 
