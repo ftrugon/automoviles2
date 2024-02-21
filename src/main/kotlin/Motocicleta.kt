@@ -10,9 +10,8 @@ class Motocicleta(marca: String,
         require(cilindrada in 125..1000){"La cilindrada no puede ser mayor a 1000 y menor a 125"}
     }
 
-    override fun calcularautonomia(): Float {
-        KM_por_L = 19 + (cilindrada / 1000)
-        return super.calcularautonomia()
+    override fun obtenerKm_por_L(): Float {
+        return 19 + (cilindrada.toFloat() / 1000)
     }
 
     fun realizarcaballito():Float{

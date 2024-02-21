@@ -4,32 +4,26 @@ class Automovil(val esHibrido:Boolean,
                 marca: String,
                 modelo: String,
                 capacidadcombustible:Float,
-                val tipo :String,
                 combustibleactual: Float,
                 kilometrosactuales: Float
 ):Vehiculo(marca,modelo,capacidadcombustible,
     combustibleactual, kilometrosactuales
 ){
-    init {
-        require(tipo.isNotEmpty()){"Tipo no puede estar vacio"}
-    }
 
     companion object{
         var condicionBritanica:Boolean = false
     }
 
     override fun toString(): String {
-        return "${super.toString().dropLast(1).replace("Vehiculo","Coche")}, tipo = $tipo)"
+        return "${super.toString().dropLast(1).replace("Vehiculo","Coche")})"
     }
-
-    override fun calcularautonomia(): Float {
-        KM_por_L = if (esHibrido) 15 else 10
-        return super.calcularautonomia()
-    }
-
 
     fun cambiarCondicionBritanica(nuevacondicio:Boolean){
         condicionBritanica = nuevacondicio
+    }
+
+    override fun obtenerKm_por_L(): Float {
+        return if (esHibrido) KM_por_L + 5 else KM_por_L
     }
 
     fun realizarderrape():Float{

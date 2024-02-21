@@ -1,4 +1,4 @@
-open class Vehiculo(private val marca: String,
+abstract class Vehiculo(private val marca: String,
                     private val modelo: String,
                     val capacidadcombustible:Float,
                     var combustibleactual: Float,
@@ -17,7 +17,11 @@ open class Vehiculo(private val marca: String,
     }
 
     companion object{
-        var KM_por_L = 10
+        const val KM_por_L = 10F
+    }
+
+    open fun obtenerKm_por_L():Float{
+        return KM_por_L
     }
 
     fun obtenerinformacion():String{
@@ -25,7 +29,6 @@ open class Vehiculo(private val marca: String,
     }
 
     open fun calcularautonomia(): Float {
-        KM_por_L = 10
         return combustibleactual * KM_por_L
     }
 
@@ -33,7 +36,7 @@ open class Vehiculo(private val marca: String,
         val poderrecorrer = calcularautonomia()
         if (poderrecorrer >=  distancia){
 
-            this.combustibleactual -= (distancia / KM_por_L.toFloat()).redondear(2)
+            this.combustibleactual -= (distancia / obtenerKm_por_L()).redondear(2)
 
             this.kilometrosactuales += distancia
 
@@ -57,21 +60,18 @@ open class Vehiculo(private val marca: String,
 
 
     fun repostar(cantidad:Float = 0F):Float{
-        if (cantidad == 0F) {
-            val arepostar = (capacidadcombustible - combustibleactual).redondear(2)
+        val capacidadMenosActual = (capacidadcombustible - combustibleactual).redondear(2)
+        return if (cantidad <= 0F) {
             combustibleactual = capacidadcombustible.redondear(2)
-            return arepostar
+            capacidadMenosActual
 
-        }else if (cantidad < (capacidadcombustible - combustibleactual).redondear(2)){
-            val arepostar = ((capacidadcombustible - combustibleactual) - cantidad).redondear(2)
+        } else if (cantidad < capacidadMenosActual) {
             combustibleactual += cantidad
-            println("Se tienen que repostar $arepostar L")
-            return arepostar
-        }else{
-            val arepostar = (capacidadcombustible - combustibleactual).redondear(2)
+            cantidad
+
+        } else {
             combustibleactual = capacidadcombustible.redondear(2)
-            println("Se tienen que repostar $arepostar L")
-            return arepostar
+            capacidadMenosActual
         }
     }
 
