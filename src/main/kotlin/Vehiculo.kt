@@ -1,13 +1,24 @@
-abstract class Vehiculo(private val marca: String,
-                    private val modelo: String,
-                    val capacidadcombustible:Float,
-                    var combustibleactual: Float,
-                    var kilometrosactuales: Float
+abstract class Vehiculo(
+    val nombre: String,
+    private val marca: String,
+    private val modelo: String,
+    val capacidadcombustible:Float,
+    var combustibleactual: Float,
+    var kilometrosactuales: Float
 ){
 
     init {
+        val nombresupper = mutableListOf<String>()
+        nombre.forEach { nombresupper.add(it.uppercase()) }
+        require(this.nombre.uppercase() !in nombresupper){"El nombre no puede estar repetido"}
+        nombres.add(this.nombre)
+
+
+        requirecosastring(nombre)
         requirecosastring(marca)
         requirecosastring(modelo)
+
+
         require(capacidadcombustible > 0) {"La capidad no puedeser menor a 0"}
         require(combustibleactual in 0F..capacidadcombustible) {"El combustible actual no puede ser mayor a la capaciddad y menor a 0"}
     }
@@ -18,6 +29,7 @@ abstract class Vehiculo(private val marca: String,
 
     companion object{
         const val KM_por_L = 10F
+        val nombres = mutableListOf<String>()
     }
 
     open fun obtenerKm_por_L():Float{
@@ -34,27 +46,19 @@ abstract class Vehiculo(private val marca: String,
 
     open fun realizarviaje(distancia:Float):Float{
         val poderrecorrer = calcularautonomia()
-        if (poderrecorrer >=  distancia){
+        return if (poderrecorrer >=  distancia){
 
             this.combustibleactual -= (distancia / obtenerKm_por_L()).redondear(2)
-
             this.kilometrosactuales += distancia
-
-            println("Se han recorrido todos los kilometros")
-
-            return 0F
+            0F
 
         }else {
 
             val quequeda = distancia - poderrecorrer
-
             this.combustibleactual = 0F
-
             this.kilometrosactuales += distancia - quequeda
+            quequeda
 
-            println("Quedan algunos kilometros $quequeda")
-
-            return quequeda
         }
     }
 
@@ -76,7 +80,7 @@ abstract class Vehiculo(private val marca: String,
     }
 
     override fun toString(): String {
-        return "Vehiculo (marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
+        return "Vehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
     }
 
 }

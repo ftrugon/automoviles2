@@ -1,13 +1,14 @@
 import kotlin.reflect.KMutableProperty
 
-class Automovil(val esHibrido:Boolean,
-                marca: String,
-                modelo: String,
-                capacidadcombustible:Float,
-                combustibleactual: Float,
-                kilometrosactuales: Float
-):Vehiculo(marca,modelo,capacidadcombustible,
-    combustibleactual, kilometrosactuales
+class Automovil(
+    nombre:String,
+    marca: String,
+    modelo: String,
+    capacidadcombustible:Float,
+    combustibleactual: Float,
+    kilometrosactuales: Float,
+    private val esHibrido:Boolean
+):Vehiculo(nombre,marca,modelo,capacidadcombustible, combustibleactual, kilometrosactuales
 ){
 
     companion object{

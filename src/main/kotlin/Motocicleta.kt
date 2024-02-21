@@ -1,10 +1,12 @@
-class Motocicleta(marca: String,
-                  modelo: String,
-                  capacidadcombustible:Float,
-                  val cilindrada :Int,
-                  combustibleactual: Float,
-                  kilometrosactuales: Float
-):Vehiculo(marca,modelo,capacidadcombustible, combustibleactual, kilometrosactuales){
+class Motocicleta(
+    nombre:String,
+    marca: String,
+    modelo: String,
+    capacidadcombustible:Float,
+    private val cilindrada :Int,
+    combustibleactual: Float,
+    kilometrosactuales: Float
+):Vehiculo(nombre,marca,modelo,capacidadcombustible, combustibleactual, kilometrosactuales){
 
     init {
         require(cilindrada in 125..1000){"La cilindrada no puede ser mayor a 1000 y menor a 125"}
