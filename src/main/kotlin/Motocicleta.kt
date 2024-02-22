@@ -3,13 +3,13 @@ class Motocicleta(
     marca: String,
     modelo: String,
     capacidadcombustible:Float,
-    private val cilindrada :Int,
+    private val cilindrada :Float,
     combustibleactual: Float,
     kilometrosactuales: Float
 ):Vehiculo(nombre,marca,modelo,capacidadcombustible, combustibleactual, kilometrosactuales){
 
     init {
-        require(cilindrada in 125..1000){"La cilindrada no puede ser mayor a 1000 y menor a 125"}
+        require(cilindrada in 125F..1000F){"La cilindrada no puede ser mayor a 1000 y menor a 125"}
     }
 
     override fun obtenerKm_por_L(): Float {
