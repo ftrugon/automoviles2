@@ -3,9 +3,9 @@ class Motocicleta(
     marca: String,
     modelo: String,
     capacidadcombustible:Float,
-    private val cilindrada :Float,
     combustibleactual: Float,
-    kilometrosactuales: Float
+    kilometrosactuales: Float,
+    private val cilindrada :Float
 ):Vehiculo(nombre,marca,modelo,capacidadcombustible, combustibleactual, kilometrosactuales){
 
     init {

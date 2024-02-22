@@ -1,4 +1,4 @@
-abstract class Vehiculo(
+open class Vehiculo(
     val nombre: String,
     private val marca: String,
     private val modelo: String,
@@ -19,7 +19,7 @@ abstract class Vehiculo(
         requirecosastring(modelo)
 
 
-        require(capacidadcombustible > 0) {"La capidad no puedeser menor a 0"}
+        require(capacidadcombustible > 0) {"La capidad no puede ser menor a 0"}
         require(combustibleactual in 0F..capacidadcombustible) {"El combustible actual no puede ser mayor a la capaciddad y menor a 0"}
     }
 

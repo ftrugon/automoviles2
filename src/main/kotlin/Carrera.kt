@@ -3,7 +3,7 @@ import kotlin.random.Random
 class Carrera(
     val nombreCarrera: String,
     val distanciaTotal: Float,
-    val participantes: List<Vehiculo>,
+    val participantes: MutableList<Vehiculo>,
 
 ) {
     var estadoCarrera: Boolean = false
@@ -18,20 +18,22 @@ class Carrera(
 
     fun iniciarcarrera() {
         estadoCarrera = true
+        //while (estadoCarrera) {
+            val aleatorio = participantes.random()
+            avanzarVehiculo(aleatorio)
+            //Todo: actualizar posiciones
+            actualizarPosiciones()
+            //estadocarrera = determinar ganador
 
+        //}
     }
 
     fun avanzarVehiculo(vehiculo: Vehiculo){
-        val arealizar = Random.nextInt(10,201).toFloat()
 
-        val quedaalgo = vehiculo.realizarviaje(arealizar)
-        if (quedaalgo != 0F){
-            println("nada")
-            repostarVehiculo(vehiculo,1F)
-        }
+
     }
 
-    fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float){
+    fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
         vehiculo.repostar(cantidad)
     }
 
@@ -44,11 +46,28 @@ class Carrera(
     }
 
     fun actualizarPosiciones(){
-
+        var cont = 1
+        val copiadeparticipantes: MutableList<Vehiculo> = participantes
+        do {
+            var mayorastaelmoment = participantes[0]
+            for (vehicu in copiadeparticipantes){
+                if (vehicu.kilometrosactuales > mayorastaelmoment.kilometrosactuales){
+                    mayorastaelmoment = vehicu
+                }
+            }
+            posiciones[mayorastaelmoment.nombre] = cont
+            copiadeparticipantes.remove(mayorastaelmoment)
+            cont++
+            println(posiciones)
+        }while (copiadeparticipantes.isNotEmpty())
     }
 
     fun determinarGanador(){
+        for (vehi in participantes){
+            if (vehi.kilometrosactuales >= distanciaTotal){
 
+            }
+        }
     }
 
     fun obtenerResultados(){
