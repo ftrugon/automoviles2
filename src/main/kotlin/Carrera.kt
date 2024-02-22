@@ -60,12 +60,15 @@ class Carrera(
         println(posiciones)
     }
 
-    fun determinarGanador():Vehiculo{
+    fun determinarGanador():Vehiculo?{
+        participantes.forEach { if (it.kilometrosactuales > distanciaTotal) return it else return null }
         for (vehi in participantes){
             if (vehi.kilometrosactuales >= distanciaTotal){
                 return vehi
             }
         }
+        return null
+
     }
 
     fun obtenerResultados(){
