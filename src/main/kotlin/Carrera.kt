@@ -49,23 +49,21 @@ class Carrera(
         var cont = 1
         val copiadeparticipantes: MutableList<Vehiculo> = participantes
         do {
+
             var mayorastaelmoment = participantes[0]
-            for (vehicu in copiadeparticipantes){
-                if (vehicu.kilometrosactuales > mayorastaelmoment.kilometrosactuales){
-                    mayorastaelmoment = vehicu
-                }
-            }
+            copiadeparticipantes.forEach { if (it.kilometrosactuales > mayorastaelmoment.kilometrosactuales){mayorastaelmoment = it} }
+
             posiciones[mayorastaelmoment.nombre] = cont
-            copiadeparticipantes.remove(mayorastaelmoment)
-            cont++
-            println(posiciones)
+            copiadeparticipantes.remove(mayorastaelmoment).also { cont++ }
+
         }while (copiadeparticipantes.isNotEmpty())
+        println(posiciones)
     }
 
-    fun determinarGanador(){
+    fun determinarGanador():Vehiculo{
         for (vehi in participantes){
             if (vehi.kilometrosactuales >= distanciaTotal){
-
+                return vehi
             }
         }
     }
