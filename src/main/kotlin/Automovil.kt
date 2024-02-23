@@ -28,6 +28,7 @@ class Automovil(
     }
 
     fun realizarderrape():Float{
+        acciones.add("derrape")
         return if (combustibleactual >=  (7.5/10)){
             if (esHibrido){
                 val litrosarestar = 7.5/ KM_por_L

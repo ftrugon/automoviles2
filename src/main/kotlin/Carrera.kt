@@ -3,12 +3,12 @@ import kotlin.random.Random
 class Carrera(
     val nombreCarrera: String,
     val distanciaTotal: Float,
-    val participantes: MutableList<Vehiculo>,
+    val participantes: List<Vehiculo>,
 
 ) {
     var estadoCarrera: Boolean = false
     var historialAcciones = mutableMapOf<String, MutableList<String>>()
-    var posiciones =  mutableMapOf<String, Int>()
+    var posiciones =  mutableMapOf<Vehiculo, Int>()
 
     init {
         require(nombreCarrera.isNotEmpty()) {"El nombre de la carrera no puede estar vacio"}
@@ -18,14 +18,12 @@ class Carrera(
 
     fun iniciarcarrera() {
         estadoCarrera = true
-        //while (estadoCarrera) {
+        while (estadoCarrera) {
             val aleatorio = participantes.random()
             avanzarVehiculo(aleatorio)
-            //Todo: actualizar posiciones
             actualizarPosiciones()
-            //estadocarrera = determinar ganador
-
-        //}
+            determinarGanador()
+        }
     }
 
     fun avanzarVehiculo(vehiculo: Vehiculo){
@@ -47,34 +45,39 @@ class Carrera(
 
     fun actualizarPosiciones(){
         var cont = 1
-        val copiadeparticipantes: MutableList<Vehiculo> = participantes
+        val copiadeparticipantes = participantes.toMutableList()
         do {
 
-            var mayorastaelmoment = participantes[0]
+            var mayorastaelmoment = copiadeparticipantes[0]
             copiadeparticipantes.forEach { if (it.kilometrosactuales > mayorastaelmoment.kilometrosactuales){mayorastaelmoment = it} }
 
-            posiciones[mayorastaelmoment.nombre] = cont
+            posiciones[mayorastaelmoment] = cont
             copiadeparticipantes.remove(mayorastaelmoment).also { cont++ }
 
         }while (copiadeparticipantes.isNotEmpty())
-        println(posiciones)
     }
 
-    fun determinarGanador():Vehiculo?{
-        participantes.forEach { if (it.kilometrosactuales > distanciaTotal) return it else return null }
+
+    fun determinarGanador(){
         for (vehi in participantes){
             if (vehi.kilometrosactuales >= distanciaTotal){
-                return vehi
+                println("!!!HAY UN GANADOR!!!")
+                estadoCarrera = false
+                println(vehi.nombre)
             }
         }
-        return null
-
     }
 
-    fun obtenerResultados(){
 
+    fun obtenerResultados():List<ResultadoCarrera>{
+        val resultados = mutableListOf<ResultadoCarrera>()
+        for ((vehi,posicion) in posiciones){
+            resultados.add(ResultadoCarrera(vehi,posicion,vehi.kilometrosactuales,vehi.paradasrepostajes,vehi.acciones))
+        }
+        return resultados
     }
 
+    //CREO QUE NO VOY A USAR ESTA FUNCION
     fun registrarAccion(vehiculo: String, accion: String){
 
     }

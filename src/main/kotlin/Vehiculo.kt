@@ -7,6 +7,10 @@ open class Vehiculo(
     var kilometrosactuales: Float
 ){
 
+    var paradasrepostajes = 0
+    var acciones = mutableListOf<String>()
+
+
     init {
         val nombresupper = mutableListOf<String>()
         nombre.forEach { nombresupper.add(it.uppercase()) }
@@ -46,6 +50,7 @@ open class Vehiculo(
 
     open fun realizarviaje(distancia:Float):Float{
         val poderrecorrer = calcularautonomia()
+        acciones.add("realizarviaje")
         return if (poderrecorrer >=  distancia){
 
             this.combustibleactual -= (distancia / obtenerKm_por_L()).redondear(2)
@@ -64,23 +69,28 @@ open class Vehiculo(
 
 
     fun repostar(cantidad:Float = 0F):Float{
+        acciones.add("repostar")
         val capacidadMenosActual = (capacidadcombustible - combustibleactual).redondear(2)
         return if (cantidad <= 0F) {
             combustibleactual = capacidadcombustible.redondear(2)
+            paradasrepostajes++
             capacidadMenosActual
 
         } else if (cantidad < capacidadMenosActual) {
             combustibleactual += cantidad
+            paradasrepostajes++
             cantidad
 
         } else {
             combustibleactual = capacidadcombustible.redondear(2)
+            paradasrepostajes++
             capacidadMenosActual
         }
+
     }
 
     override fun toString(): String {
-        return "Vehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
+        return "\nVehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
     }
 
 }
