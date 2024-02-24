@@ -23,6 +23,7 @@ class Carrera(
             avanzarVehiculo(aleatorio)
             actualizarPosiciones()
             determinarGanador()
+            registrarAccion(aleatorio.nombre,"fokar")
         }
     }
 
@@ -70,15 +71,17 @@ class Carrera(
 
 
     fun obtenerResultados():List<ResultadoCarrera>{
-        val resultados = mutableListOf<ResultadoCarrera>()
-        for ((vehi,posicion) in posiciones){
-            resultados.add(ResultadoCarrera(vehi,posicion,vehi.kilometrosactuales,vehi.paradasrepostajes,vehi.acciones))
-        }
-        return resultados
+        val listaresultados = mutableListOf<ResultadoCarrera>()
+
+
     }
 
-    //CREO QUE NO VOY A USAR ESTA FUNCION
     fun registrarAccion(vehiculo: String, accion: String){
-
+        if (vehiculo in historialAcciones.keys){
+            historialAcciones[vehiculo]?.add(accion)
+        }else{
+            historialAcciones[vehiculo] = mutableListOf()
+            historialAcciones[vehiculo]?.add(accion)
+        }
     }
 }

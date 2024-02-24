@@ -8,7 +8,6 @@ open class Vehiculo(
 ){
 
     var paradasrepostajes = 0
-    var acciones = mutableListOf<String>()
 
 
     init {
@@ -50,7 +49,6 @@ open class Vehiculo(
 
     open fun realizarviaje(distancia:Float):Float{
         val poderrecorrer = calcularautonomia()
-        acciones.add("realizarviaje")
         return if (poderrecorrer >=  distancia){
 
             this.combustibleactual -= (distancia / obtenerKm_por_L()).redondear(2)
@@ -69,7 +67,6 @@ open class Vehiculo(
 
 
     fun repostar(cantidad:Float = 0F):Float{
-        acciones.add("repostar")
         val capacidadMenosActual = (capacidadcombustible - combustibleactual).redondear(2)
         return if (cantidad <= 0F) {
             combustibleactual = capacidadcombustible.redondear(2)

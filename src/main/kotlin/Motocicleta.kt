@@ -17,7 +17,6 @@ class Motocicleta(
     }
 
     fun realizarcaballito():Float{
-        acciones.add("caballito")
         val litrosarestar = 6.5F / KM_por_L
         return if (combustibleactual > litrosarestar){
             combustibleactual -= litrosarestar
