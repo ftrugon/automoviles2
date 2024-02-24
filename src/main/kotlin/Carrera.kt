@@ -23,13 +23,12 @@ class Carrera(
             avanzarVehiculo(aleatorio)
             actualizarPosiciones()
             determinarGanador()
-            registrarAccion(aleatorio.nombre,"fokar")
         }
     }
 
     fun avanzarVehiculo(vehiculo: Vehiculo){
-
-
+        val distacialeatoria = Random.nextInt(1,201)
+        val numfiligranas = distacialeatoria / 20
     }
 
     fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
@@ -72,16 +71,17 @@ class Carrera(
 
     fun obtenerResultados():List<ResultadoCarrera>{
         val listaresultados = mutableListOf<ResultadoCarrera>()
-
-
+        for((vehi,posi) in posiciones){
+            listaresultados.add(ResultadoCarrera(vehi,posi,vehi.kilometrosactuales,vehi.paradasrepostajes,historialAcciones[vehi.nombre]?.toList()?: emptyList()))
+        }
+        return listaresultados
     }
 
     fun registrarAccion(vehiculo: String, accion: String){
-        if (vehiculo in historialAcciones.keys){
+        if (vehiculo in historialAcciones){
             historialAcciones[vehiculo]?.add(accion)
         }else{
-            historialAcciones[vehiculo] = mutableListOf()
-            historialAcciones[vehiculo]?.add(accion)
+            historialAcciones[vehiculo] = mutableListOf(accion)
         }
     }
 }
