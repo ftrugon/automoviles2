@@ -13,7 +13,7 @@ class Motocicleta(
     }
 
     override fun obtenerKm_por_L(): Float {
-        return 19 + (cilindrada.toFloat() / 1000)
+        return 19 + (cilindrada / 1000)
     }
 
     fun realizarcaballito():Float{
@@ -22,7 +22,6 @@ class Motocicleta(
             combustibleactual -= litrosarestar
             combustibleactual.redondear(2)
         }else{
-            println("No queda combustible como para hacer un caballito")
             combustibleactual.redondear(2)
         }
     }

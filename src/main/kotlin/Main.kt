@@ -18,7 +18,21 @@ fun main() {
     val carrera = Carrera("Formula 1",2000F,listacoches)
 
     carrera.iniciarcarrera()
+    val listadoresultaddos = carrera.obtenerResultados()
 
+    println("PODIO:")
+    var cont = 1
+    listadoresultaddos.forEach{
+        println("$cont -> ${it.vehiculo.nombre}")
+        cont++
+    }
+
+    cont = 1
+    listadoresultaddos.forEach{
+        println("$cont -> ${it.vehiculo.nombre}")
+        it.historialAcciones.forEach{ println(it)}
+        cont++
+    }
 
     //val moto1 = Motocicleta("AyO","kawasaki","kriko",30F,20F,0F,220F)
     //println(moto1)

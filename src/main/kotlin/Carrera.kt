@@ -1,3 +1,5 @@
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.random.Random
 
 class Carrera(
@@ -9,6 +11,7 @@ class Carrera(
     var estadoCarrera: Boolean = false
     var historialAcciones = mutableMapOf<String, MutableList<String>>()
     var posiciones =  mutableMapOf<Vehiculo, Int>()
+    val ultimosectorrecorridoporvehiculo = mutableMapOf<Vehiculo,Float>()
 
     init {
         require(nombreCarrera.isNotEmpty()) {"El nombre de la carrera no puede estar vacio"}
@@ -21,15 +24,71 @@ class Carrera(
         while (estadoCarrera) {
             val aleatorio = participantes.random()
             avanzarVehiculo(aleatorio)
-            actualizarPosiciones()
             determinarGanador()
         }
     }
 
     fun avanzarVehiculo(vehiculo: Vehiculo){
-        val distacialeatoria = Random.nextInt(1,201)
-        val numfiligranas = distacialeatoria / 20
+
+
+        val distacialeatoria = (Random.nextInt(1,201)).toFloat()
+        registrarAccion(vehiculo.nombre,"Inicia viaje: A recorrer ${distacialeatoria}Kms (${vehiculo.kilometrosactuales}Kms y ${vehiculo.combustibleactual}L actuales)")
+
+
+        var distacialeatoriamasultimo = distacialeatoria
+
+        while (distacialeatoriamasultimo > 0) {
+            val distanciaRecorrer = minOf(20F, distacialeatoriamasultimo)
+
+            val aleatoriedad = Random.nextInt(1, 3)
+            if (aleatoriedad == 1) {
+                realizarFiligrana(vehiculo)
+                registrarAccion(vehiculo.nombre, "Derrape: Combustible restante ${vehiculo.combustibleactual.redondear(2)}")
+            } else {
+                val combustibleConsumido = vehiculo.realizarviaje(distanciaRecorrer)
+                registrarAccion(vehiculo.nombre, "Avance tramo: recorridos $distanciaRecorrer Kms")
+                distacialeatoriamasultimo -= combustibleConsumido
+            }
+
+            if (vehiculo.combustibleactual <= 0) {
+                repostarVehiculo(vehiculo)
+                registrarAccion(vehiculo.nombre, "Repostaje: ${vehiculo.capacidadcombustible}")
+            }
+        }
+
+        //for (i in 1..ceil(distacialeatoriamasultimo/20).toInt()) {
+//
+        //    val distanciarecorrida = minOf(20F,distacialeatoriamasultimo)
+//
+        //    if (distanciarecorrida >= 20F){
+//
+        //        val aleatoriedad = Random.nextInt(1,3)
+        //        if (aleatoriedad == 1) {
+        //            realizarFiligrana(vehiculo)
+        //            registrarAccion(vehiculo.nombre,"Derrape: Combustible restante ${vehiculo.combustibleactual.redondear(2)}")
+//
+        //        }else if(aleatoriedad == 2){
+        //            vehiculo.realizarviaje(20F)
+        //            registrarAccion(vehiculo.nombre,"Avance tramo: recorridos 20 Kms")
+        //            distacialeatoriamasultimo -= 20F
+        //        }
+        //    }else {
+//
+        //        val combustibleConsumido = vehiculo.realizarviaje(distanciarecorrida)
+        //        registrarAccion(vehiculo.nombre, "Avance tramo: recorridos $distanciarecorrida Kms")
+        //        distacialeatoriamasultimo -= combustibleConsumido
+//
+        //    }
+//
+        //    if (vehiculo.combustibleactual <= 0) {
+        //        repostarVehiculo(vehiculo)
+        //        registrarAccion(vehiculo.nombre, "Repostaje: ${vehiculo.capacidadcombustible}")
+        //    }
+        //}
+
+
     }
+
 
     fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
         vehiculo.repostar(cantidad)
@@ -42,21 +101,6 @@ class Carrera(
             vehiculo.realizarcaballito()
         }
     }
-
-    fun actualizarPosiciones(){
-        var cont = 1
-        val copiadeparticipantes = participantes.toMutableList()
-        do {
-
-            var mayorastaelmoment = copiadeparticipantes[0]
-            copiadeparticipantes.forEach { if (it.kilometrosactuales > mayorastaelmoment.kilometrosactuales){mayorastaelmoment = it} }
-
-            posiciones[mayorastaelmoment] = cont
-            copiadeparticipantes.remove(mayorastaelmoment).also { cont++ }
-
-        }while (copiadeparticipantes.isNotEmpty())
-    }
-
 
     fun determinarGanador(){
         for (vehi in participantes){
@@ -71,8 +115,10 @@ class Carrera(
 
     fun obtenerResultados():List<ResultadoCarrera>{
         val listaresultados = mutableListOf<ResultadoCarrera>()
-        for((vehi,posi) in posiciones){
-            listaresultados.add(ResultadoCarrera(vehi,posi,vehi.kilometrosactuales,vehi.paradasrepostajes,historialAcciones[vehi.nombre]?.toList()?: emptyList()))
+        var cont = 1
+        for (vehi in participantes.sortedByDescending { it.kilometrosactuales }){
+            listaresultados.add(ResultadoCarrera(vehi,cont,vehi.kilometrosactuales,vehi.paradasrepostajes,historialAcciones[vehi.nombre]?.toList()?: emptyList()))
+            cont++
         }
         return listaresultados
     }
@@ -84,4 +130,6 @@ class Carrera(
             historialAcciones[vehiculo] = mutableListOf(accion)
         }
     }
+
+
 }

@@ -56,7 +56,6 @@ open class Vehiculo(
             0F
 
         }else {
-
             val quequeda = distancia - poderrecorrer
             this.combustibleactual = 0F
             this.kilometrosactuales += distancia - quequeda
@@ -87,7 +86,7 @@ open class Vehiculo(
     }
 
     override fun toString(): String {
-        return "\nVehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
+        return "Vehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
     }
 
 }
