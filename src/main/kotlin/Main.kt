@@ -15,43 +15,27 @@ fun main() {
 
     )
 
-    val carrera = Carrera("Formula 1",2000F,listacoches)
+    val carrera = Carrera("Formula 1",1000F,listacoches)
 
     carrera.iniciarcarrera()
     val listadoresultaddos = carrera.obtenerResultados()
 
     println("PODIO:")
+    println()
     var cont = 1
     listadoresultaddos.forEach{
-        println("$cont -> ${it.vehiculo.nombre}")
+        println("$cont -> ${it.vehiculo.nombre} : ${it.kilometraje}")
         cont++
     }
+
+    println()
 
     cont = 1
     listadoresultaddos.forEach{
-        println("$cont -> ${it.vehiculo.nombre}")
+        println("\n$cont -> ${it.vehiculo.nombre}")
         it.historialAcciones.forEach{ println(it)}
         cont++
     }
-
-    //val moto1 = Motocicleta("AyO","kawasaki","kriko",30F,20F,0F,220F)
-    //println(moto1)
-    //moto1.realizarviaje(100.0F)
-    //println(moto1)
-    //moto1.realizarcaballito()
-    //moto1.realizarcaballito()
-    //moto1.realizarcaballito()
-    //println(moto1)
-//
-//
-    //val coche1 = Automovil("aayer","kowalski","opciones",50F,50F,0F,false)
-    //println(coche1)
-    //coche1.realizarviaje(100F)
-    //println(coche1)
-    //coche1.realizarderrape()
-    //coche1.realizarderrape()
-    //coche1.realizarderrape()
-    //println(coche1)
 
 
 }

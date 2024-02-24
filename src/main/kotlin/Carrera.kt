@@ -3,15 +3,13 @@ import kotlin.math.floor
 import kotlin.random.Random
 
 class Carrera(
-    val nombreCarrera: String,
-    val distanciaTotal: Float,
-    val participantes: List<Vehiculo>,
+    nombreCarrera: String,
+    private val distanciaTotal: Float,
+    private val participantes: List<Vehiculo>,
 
-) {
-    var estadoCarrera: Boolean = false
-    var historialAcciones = mutableMapOf<String, MutableList<String>>()
-    var posiciones =  mutableMapOf<Vehiculo, Int>()
-    val ultimosectorrecorridoporvehiculo = mutableMapOf<Vehiculo,Float>()
+    ) {
+    private var estadoCarrera: Boolean = false
+    private var historialAcciones = mutableMapOf<String, MutableList<String>>()
 
     init {
         require(nombreCarrera.isNotEmpty()) {"El nombre de la carrera no puede estar vacio"}
@@ -28,73 +26,38 @@ class Carrera(
         }
     }
 
-    fun avanzarVehiculo(vehiculo: Vehiculo){
+    private fun avanzarVehiculo(vehiculo: Vehiculo){
 
+        var aleatorio = Random.nextInt(10,201).toFloat()
+        registrarAccion(vehiculo.nombre,"Iniciar viaje: A recorrer $aleatorio Kms (${vehiculo.kilometrosactuales.redondear(2)}kms y ${vehiculo.combustibleactual.redondear(2)}L actuales)")
 
-        val distacialeatoria = (Random.nextInt(1,201)).toFloat()
-        registrarAccion(vehiculo.nombre,"Inicia viaje: A recorrer ${distacialeatoria}Kms (${vehiculo.kilometrosactuales}Kms y ${vehiculo.combustibleactual}L actuales)")
+        for (i in 1..ceil(aleatorio/20).toInt()){
+            val arrecorrer = minOf(20f, aleatorio)
 
-
-        var distacialeatoriamasultimo = distacialeatoria
-
-        while (distacialeatoriamasultimo > 0) {
-            val distanciaRecorrer = minOf(20F, distacialeatoriamasultimo)
-
-            val aleatoriedad = Random.nextInt(1, 3)
-            if (aleatoriedad == 1) {
+            val aleatoriedad = Random.nextInt(1,3)
+            if (aleatoriedad == 1){
+                val recorrido = vehiculo.realizarviaje(arrecorrer)
+                if (recorrido == 0F){
+                    registrarAccion(vehiculo.nombre,"Avance tramo: ${(arrecorrer-recorrido).redondear(2)} km")
+                }else{
+                    registrarAccion(vehiculo.nombre,"Avance tramo: ${(arrecorrer-recorrido).redondear(2)} km")
+                    repostarVehiculo(vehiculo)
+                    registrarAccion(vehiculo.nombre,"Se han repostado ${vehiculo.capacidadcombustible}")
+                }
+            }else{
                 realizarFiligrana(vehiculo)
-                registrarAccion(vehiculo.nombre, "Derrape: Combustible restante ${vehiculo.combustibleactual.redondear(2)}")
-            } else {
-                val combustibleConsumido = vehiculo.realizarviaje(distanciaRecorrer)
-                registrarAccion(vehiculo.nombre, "Avance tramo: recorridos $distanciaRecorrer Kms")
-                distacialeatoriamasultimo -= combustibleConsumido
+                if (vehiculo is Automovil) registrarAccion(vehiculo.nombre,"Derrape, quedan ${vehiculo.combustibleactual.redondear(2)}L")else registrarAccion(vehiculo.nombre,"Caballito, quedan ${vehiculo.combustibleactual.redondear(2)}L")
             }
-
-            if (vehiculo.combustibleactual <= 0) {
-                repostarVehiculo(vehiculo)
-                registrarAccion(vehiculo.nombre, "Repostaje: ${vehiculo.capacidadcombustible}")
-            }
+            aleatorio -= 20F
         }
-
-        //for (i in 1..ceil(distacialeatoriamasultimo/20).toInt()) {
-//
-        //    val distanciarecorrida = minOf(20F,distacialeatoriamasultimo)
-//
-        //    if (distanciarecorrida >= 20F){
-//
-        //        val aleatoriedad = Random.nextInt(1,3)
-        //        if (aleatoriedad == 1) {
-        //            realizarFiligrana(vehiculo)
-        //            registrarAccion(vehiculo.nombre,"Derrape: Combustible restante ${vehiculo.combustibleactual.redondear(2)}")
-//
-        //        }else if(aleatoriedad == 2){
-        //            vehiculo.realizarviaje(20F)
-        //            registrarAccion(vehiculo.nombre,"Avance tramo: recorridos 20 Kms")
-        //            distacialeatoriamasultimo -= 20F
-        //        }
-        //    }else {
-//
-        //        val combustibleConsumido = vehiculo.realizarviaje(distanciarecorrida)
-        //        registrarAccion(vehiculo.nombre, "Avance tramo: recorridos $distanciarecorrida Kms")
-        //        distacialeatoriamasultimo -= combustibleConsumido
-//
-        //    }
-//
-        //    if (vehiculo.combustibleactual <= 0) {
-        //        repostarVehiculo(vehiculo)
-        //        registrarAccion(vehiculo.nombre, "Repostaje: ${vehiculo.capacidadcombustible}")
-        //    }
-        //}
-
-
     }
 
 
-    fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
+    private fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
         vehiculo.repostar(cantidad)
     }
 
-    fun realizarFiligrana(vehiculo: Vehiculo){
+    private fun realizarFiligrana(vehiculo: Vehiculo){
         if (vehiculo is Automovil) {
             vehiculo.realizarderrape()
         }else if (vehiculo is Motocicleta){
@@ -102,7 +65,7 @@ class Carrera(
         }
     }
 
-    fun determinarGanador(){
+    private fun determinarGanador(){
         for (vehi in participantes){
             if (vehi.kilometrosactuales >= distanciaTotal){
                 println("!!!HAY UN GANADOR!!!")

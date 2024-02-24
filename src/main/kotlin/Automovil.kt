@@ -1,5 +1,3 @@
-import kotlin.reflect.KMutableProperty
-
 class Automovil(
     nombre:String,
     marca: String,
