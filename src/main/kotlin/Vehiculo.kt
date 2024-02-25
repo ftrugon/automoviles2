@@ -1,3 +1,13 @@
+/**
+ * Clase base que representa un vehículo.
+ *
+ * @property nombre El nombre del vehículo.
+ * @property marca La marca del vehículo.
+ * @property modelo El modelo del vehículo.
+ * @property capacidadcombustible La capacidad de combustible del vehículo en litros.
+ * @property combustibleactual El nivel actual de combustible del vehículo en litros.
+ * @property kilometrosactuales Los kilómetros actuales recorridos por el vehículo.
+ */
 open class Vehiculo(
     val nombre: String,
     private val marca: String,
@@ -7,6 +17,7 @@ open class Vehiculo(
     var kilometrosactuales: Float
 ){
 
+    // Supongo que se puede hacer de otra forma pero esta es la mas sencilla de contar las paradas para repostar
     var paradasrepostajes = 0
 
 
@@ -35,23 +46,44 @@ open class Vehiculo(
         val nombres = mutableListOf<String>()
     }
 
-    open fun obtenerKm_por_L():Float{
+    /**
+     * Obtiene la cantidad de kilómetros que el vehículo puede recorrer por litro de combustible.
+     *
+     * @return La cantidad de kilómetros por litro.
+     */
+    open fun obtenerKmporL():Float{
         return KM_por_L
     }
 
+    /**
+     * Obtiene información sobre el vehículo, incluyendo su autonomía restante y nivel de combustible.
+     *
+     * @return Una cadena con la información del vehículo.
+     */
     fun obtenerinformacion():String{
         return "El vehiculo puede recorrer ${calcularautonomia()}km y le quedan ${combustibleactual}L"
     }
 
+    /**
+     * Calcula la autonomía restante del vehículo en kilómetros.
+     *
+     * @return La autonomía restante del vehículo en kilómetros.
+     */
     open fun calcularautonomia(): Float {
         return combustibleactual * KM_por_L
     }
 
+    /**
+     * Realiza un viaje con el vehículo, avanzando una distancia específica y consumiendo combustible en consecuencia.
+     *
+     * @param distancia La distancia a recorrer en kilómetros.
+     * @return La cantidad de kilómetros que el vehículo no pudo recorrer debido a la falta de combustible.
+     */
     open fun realizarviaje(distancia:Float):Float{
         val poderrecorrer = calcularautonomia()
         return if (poderrecorrer >=  distancia){
 
-            this.combustibleactual -= (distancia / obtenerKm_por_L()).redondear(2)
+            this.combustibleactual -= (distancia / obtenerKmporL()).redondear(2)
             this.kilometrosactuales += distancia
             0F
 
@@ -65,6 +97,12 @@ open class Vehiculo(
     }
 
 
+    /**
+     * Reposta combustible en el vehículo.
+     *
+     * @param cantidad La cantidad de combustible a repostar en litros. Si no se proporciona, se repostará hasta alcanzar la capacidad máxima.
+     * @return La cantidad de combustible repostado en litros.
+     */
     fun repostar(cantidad:Float = 0F):Float{
         val capacidadMenosActual = (capacidadcombustible - combustibleactual).redondear(2)
         return if (cantidad <= 0F) {

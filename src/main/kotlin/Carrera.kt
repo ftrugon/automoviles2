@@ -1,7 +1,13 @@
 import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.random.Random
 
+/**
+ * Clase que representa una carrera entre varios vehículos.
+ *
+ * @property nombreCarrera El nombre de la carrera.
+ * @property distanciaTotal La distancia total de la carrera en kilómetros.
+ * @property participantes La lista de vehículos que participan en la carrera.
+ */
 class Carrera(
     nombreCarrera: String,
     private val distanciaTotal: Float,
@@ -17,6 +23,9 @@ class Carrera(
 
     }
 
+    /**
+     * Inicia la carrera, permitiendo que los vehículos avancen hasta que uno de ellos llegue a la meta.
+     */
     fun iniciarcarrera() {
         estadoCarrera = true
         while (estadoCarrera) {
@@ -26,6 +35,12 @@ class Carrera(
         }
     }
 
+
+    /**
+     * Se encarga de hacer que los vehiculos se muevan una distancia aleatoria entre 10 y 200 km. Si el vehículo
+     * necesita repostar, se llama al método repostarVehiculo() y tambien se llama a realizarfiligrana.
+     * @param vehiculo es el vehiculo al que le ha tocado moverse
+     */
     private fun avanzarVehiculo(vehiculo: Vehiculo){
 
         var aleatorio = Random.nextInt(10,201).toFloat()
@@ -53,10 +68,19 @@ class Carrera(
     }
 
 
+    /**
+     * Resposta el vehiculo llenando el combustible indicado, si no se indica el tanque se llena entero
+     * @param vehiculo el vehiculo al que se le llenara el tanque
+     * @param cantidad la cantidad de combustible a rellenar
+     */
     private fun repostarVehiculo(vehiculo: Vehiculo, cantidad: Float = 0F){
         vehiculo.repostar(cantidad)
     }
 
+    /**
+     * Realiza una filigrana al vehiculo, si es una moto un caballito y si es un coche un derrape
+     * @param vehiculo el vehiculo que eraliza el derrape o la filigrana
+     */
     private fun realizarFiligrana(vehiculo: Vehiculo){
         if (vehiculo is Automovil) {
             vehiculo.realizarderrape()
@@ -65,6 +89,9 @@ class Carrera(
         }
     }
 
+    /**
+     * Comprueba si alguno de los corredores ha superado la longitud del campo
+     */
     private fun determinarGanador(){
         for (vehi in participantes){
             if (vehi.kilometrosactuales >= distanciaTotal){
@@ -75,7 +102,10 @@ class Carrera(
         }
     }
 
-
+    /**
+     * Devuelve una lista de los resultados de cadda participante
+     * @return la lista de los resultados de las carreras
+     */
     fun obtenerResultados():List<ResultadoCarrera>{
         val listaresultados = mutableListOf<ResultadoCarrera>()
         var cont = 1
@@ -86,7 +116,13 @@ class Carrera(
         return listaresultados
     }
 
-    fun registrarAccion(vehiculo: String, accion: String){
+
+    /**
+     * registra si un vehiculo ha hecho una cosa u otra
+     * @param vehiculo el vehiculo el cual queremos guardar la accion
+     * @param accion la accion que hace el vehiculo, un derrape, un avance, repostar
+     */
+    private fun registrarAccion(vehiculo: String, accion: String){
         if (vehiculo in historialAcciones){
             historialAcciones[vehiculo]?.add(accion)
         }else{
