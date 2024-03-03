@@ -8,10 +8,10 @@
  * @property combustibleactual El nivel actual de combustible del vehículo en litros.
  * @property kilometrosactuales Los kilómetros actuales recorridos por el vehículo.
  */
-open class Vehiculo(
-    val nombre: String,
-    private val marca: String,
-    private val modelo: String,
+abstract class Vehiculo(
+    nombre: String,
+    val marca: String,
+    val modelo: String,
     val capacidadcombustible:Float,
     var combustibleactual: Float,
     var kilometrosactuales: Float
@@ -20,30 +20,39 @@ open class Vehiculo(
     // Supongo que se puede hacer de otra forma pero esta es la mas sencilla de contar las paradas para repostar
     var paradasrepostajes = 0
 
+    var nombre = nombre
+        set(value) {
+            requireDeNombre()
+            field = value
+        }
 
     init {
-        val nombresupper = mutableListOf<String>()
-        nombre.forEach { nombresupper.add(it.uppercase()) }
-        require(this.nombre.uppercase() !in nombresupper){"El nombre no puede estar repetido"}
-        nombres.add(this.nombre)
 
-
-        requirecosastring(nombre)
-        requirecosastring(marca)
-        requirecosastring(modelo)
-
+        requireDeNombre()
 
         require(capacidadcombustible > 0) {"La capidad no puede ser menor a 0"}
         require(combustibleactual in 0F..capacidadcombustible) {"El combustible actual no puede ser mayor a la capaciddad y menor a 0"}
+
+        require(combustibleactual in (capacidadcombustible * 0.2f)..capacidadcombustible) {"El combustible debe ser un número entre el 20% y 100% de su capacidad."}
     }
 
-    private fun requirecosastring(valorarequerir:String){
-        require(valorarequerir.isNotEmpty()) {"El valor no puede estar vacio"}
-    }
 
     companion object{
         const val KM_por_L = 10F
         val nombres = mutableListOf<String>()
+    }
+
+    fun requireDeNombre(){
+        val nombresupper = mutableListOf<String>()
+        nombres.forEach { nombresupper.add(it.uppercase()) }
+        require(this.nombre.uppercase() !in nombresupper){"El nombre no puede estar repetido"}
+        nombres.add(this.nombre)
+
+        requirecosastring(nombre)
+    }
+
+    private fun requirecosastring(valorarequerir:String){
+        require(valorarequerir.isNotEmpty()) {"El valor no puede estar vacio"}
     }
 
     /**
@@ -105,26 +114,26 @@ open class Vehiculo(
      */
     fun repostar(cantidad:Float = 0F):Float{
         val capacidadMenosActual = (capacidadcombustible - combustibleactual).redondear(2)
+
+        paradasrepostajes++
+
         return if (cantidad <= 0F) {
             combustibleactual = capacidadcombustible.redondear(2)
-            paradasrepostajes++
             capacidadMenosActual
 
         } else if (cantidad < capacidadMenosActual) {
             combustibleactual += cantidad
-            paradasrepostajes++
             cantidad
 
         } else {
             combustibleactual = capacidadcombustible.redondear(2)
-            paradasrepostajes++
             capacidadMenosActual
         }
 
     }
 
     override fun toString(): String {
-        return "Vehiculo (nombre, $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
+        return "Vehiculo (nombre = $nombre, marca = $marca, modelo = $modelo, capacidad = ${capacidadcombustible.redondear(2)}, combustibleactual = ${combustibleactual.redondear(2)}, kilomentros actuales = $kilometrosactuales)"
     }
 
 }

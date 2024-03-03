@@ -9,18 +9,27 @@
  * @property kilometrosactuales Los kilómetros actuales recorridos por el automóvil.
  * @property esHibrido Indica si el automóvil es híbrido.
  */
-class Automovil(
+open class Automovil(
     nombre: String,
     marca: String,
     modelo: String,
     capacidadcombustible: Float,
     combustibleactual: Float,
     kilometrosactuales: Float,
-    private val esHibrido: Boolean
+    val esHibrido: Boolean
 ) : Vehiculo(nombre, marca, modelo, capacidadcombustible, combustibleactual, kilometrosactuales) {
+
+
+    init {
+        requirecapacidadd()
+    }
 
     companion object {
         var condicionBritanica: Boolean = false
+    }
+
+    open fun requirecapacidadd(){
+        require(capacidadcombustible in 30f..60f){"La capacidad debe estar entre 30 y 60 Litros"}
     }
 
     /**
@@ -39,20 +48,18 @@ class Automovil(
      * @return El nivel de combustible restante después del derrape.
      */
     fun realizarderrape(): Float {
-        return if (combustibleactual >= (7.5 / 10)) {
+        if (combustibleactual >= (7.5 / 10)) {
             if (esHibrido) {
-                val litrosarestar = 6.25 / KM_por_L
+                val litrosarestar = 6.25 / obtenerKmporL()
                 combustibleactual -= litrosarestar.toFloat()
-                kilometrosactuales += 6.25F
                 combustibleactual.redondear(2)
             } else {
-                val litrosarestar = 7.5 / KM_por_L
+                val litrosarestar = 7.5 / obtenerKmporL()
                 combustibleactual -= litrosarestar.toFloat()
                 combustibleactual.redondear(2)
             }
-        } else {
-            combustibleactual.redondear(2)
         }
+        return combustibleactual.redondear(2)
     }
 
     /**

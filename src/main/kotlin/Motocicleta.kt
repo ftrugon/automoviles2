@@ -9,18 +9,24 @@
  * @property kilometrosactuales Los kilómetros actuales recorridos por la motocicleta.
  * @property cilindrada La cilindrada de la motocicleta en centímetros cúbicos.
  */
-class Motocicleta(
+open class Motocicleta(
     nombre: String,
     marca: String,
     modelo: String,
     capacidadcombustible: Float,
     combustibleactual: Float,
     kilometrosactuales: Float,
-    private val cilindrada: Float
+    val cilindrada: Float
 ) : Vehiculo(nombre, marca, modelo, capacidadcombustible, combustibleactual, kilometrosactuales) {
 
     init {
-        require(cilindrada in 125F..1000F){"La cilindrada no puede ser mayor a 1000 y menor a 125"}
+        val listaCilindradas = listOf(125, 250, 400, 500, 750, 900, 1000)
+        require(cilindrada.toInt() in listaCilindradas) {"Las cilindradas solo pueden ser 125, 250, 400, 500, 750, 900 y 1000"}
+        requirecapacidadd()
+    }
+
+    open fun requirecapacidadd() {
+        require(capacidadcombustible in 15f..30f){"La capacidad debe estar entre 15 y 30 Litros"}
     }
 
     /**
@@ -39,7 +45,7 @@ class Motocicleta(
      * @return El nivel de combustible restante después del caballito.
      */
     fun realizarcaballito(): Float {
-        val litrosarestar = 6.5F / KM_por_L
+        val litrosarestar = 6.5F / obtenerKmporL()
         return if (combustibleactual > litrosarestar){
             combustibleactual -= litrosarestar
             combustibleactual.redondear(2)
